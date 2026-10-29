@@ -1,0 +1,73 @@
+/* Design tokens — Kombi's Hot Dog
+   Conceito: sinalização de food truck retrô (laranja da Kombi + grafite + creme),
+   com acabamento editorial contemporâneo. */
+:root {
+  /* Cores de marca */
+  --orange-400: #ff8a2a;
+  --orange-500: #f47a1f;   /* laranja da Kombi: ações e destaques */
+  --orange-600: #dc6410;   /* hover */
+  --orange-700: #b04a06;   /* texto laranja sobre fundo claro (AA) */
+  --mustard-400: #f6c343;  /* amarelo do logotipo: acentos pontuais */
+  --red-500: #d6372b;      /* vermelho do logotipo: apenas selos */
+
+  --ink-950: #0f0d0c;
+  --ink-900: #161311;
+  --ink-800: #201b18;
+  --ink-700: #2d2622;
+  --ink-600: #463c36;
+
+  --cream-50: #fcf8f2;
+  --cream-100: #f6eee2;
+  --cream-200: #ecdfcc;
+  --line: #e3d4bf;
+  --line-dark: #3a312b;
+
+  --text: #1a1513;
+  --text-muted: #5d524a;
+  --text-on-dark: #f7efe4;
+  --text-on-dark-muted: #bcae9f;
+
+  --whatsapp: #25d366;
+  --whatsapp-ink: #05301a;
+  --success: #1f8f4e;
+  --danger: #b42318;
+
+  /* Tipografia */
+  --font-display: "Alfa Slab One", "Rockwell", "Roboto Slab", Georgia, serif;
+  --font-body: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fs-xs: .78rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: clamp(1.2rem, 1.05rem + .6vw, 1.4rem);
+  --fs-h4: clamp(1.15rem, 1.05rem + .4vw, 1.35rem);
+  --fs-h3: clamp(1.4rem, 1.2rem + .8vw, 1.85rem);
+  --fs-h2: clamp(1.9rem, 1.4rem + 2vw, 3rem);
+  --fs-display-md: clamp(2.2rem, 1.5rem + 3vw, 3.9rem);
+  --fs-display: clamp(2.5rem, 1.6rem + 4.2vw, 5.1rem);
+
+  /* Espaçamento (escala de 4px) */
+  --s-1: .25rem; --s-2: .5rem; --s-3: .75rem; --s-4: 1rem; --s-5: 1.5rem;
+  --s-6: 2rem; --s-7: 3rem; --s-8: 4rem; --s-9: 6rem; --s-10: 8rem;
+  --section-y: clamp(3.5rem, 2.5rem + 4vw, 6.5rem);
+  --gutter: clamp(1rem, .6rem + 1.6vw, 2rem);
+  --container: 1200px;
+
+  /* Forma */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(40, 20, 5, .06), 0 2px 8px rgba(40, 20, 5, .06);
+  --shadow-2: 0 12px 32px -12px rgba(40, 20, 5, .28);
+  --shadow-3: 0 30px 60px -20px rgba(0, 0, 0, .45);
+  --ring: 0 0 0 3px var(--cream-50), 0 0 0 5px var(--orange-600);
+
+  /* Movimento */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --t-fast: 140ms;
+  --t-med: 260ms;
+
+  --header-h: 68px;
+}

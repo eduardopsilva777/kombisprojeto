@@ -1,0 +1,4 @@
+dist
+.checks
+node_modules
+tests

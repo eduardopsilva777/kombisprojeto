@@ -1,0 +1,15 @@
+{
+  "name": "kombis-hotdog",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Site do Kombi's Hot Dog — estático, sem dependências.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/build.mjs && node scripts/serve.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node scripts/build.mjs && node --test \"tests/*.test.mjs\"",
+    "check:browser": "node scripts/check-browser.mjs"
+  }
+}
