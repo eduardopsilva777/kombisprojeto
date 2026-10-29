@@ -10,7 +10,13 @@ npm test               # build + testes (carrinho, horários, dados, páginas ge
 npm run check:browser  # Chrome/Edge headless: console, layout em 3 larguras, fluxo de pedido e screenshots em .checks/
 ```
 
-Para publicar, envie o conteúdo de `dist/` para qualquer hospedagem estática (Netlify, Vercel, Cloudflare Pages, Hostinger…). Configure a página `404.html` e o redirecionamento das URLs antigas sem barra (`/cardapio` → `/cardapio/`), que a maioria dos hosts já faz sozinha.
+## Publicação (GitHub Pages)
+
+Cada push na branch `main` roda `.github/workflows/pages.yml`: testes → build → publicação em **https://eduardopsilva777.github.io/kombisprojeto/**.
+
+O site fica numa subpasta (`/kombisprojeto`), então o build recebe `BASE_PATH` e `SITE_URL` do próprio GitHub e ajusta links, imagens, canonical e sitemap. Para testar assim localmente: `BASE_PATH=/kombisprojeto npm start`.
+
+Para usar o domínio **www.kombishotdog.com.br**: em *Settings → Pages → Custom domain* do repositório, informe o domínio e aponte o DNS (CNAME `www` → `eduardopsilva777.github.io`). O workflow passa a gerar o site na raiz automaticamente.
 
 ## Onde alterar cada coisa
 

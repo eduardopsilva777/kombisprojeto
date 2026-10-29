@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const DIST = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");
 const PORT = Number(process.env.PORT) || 4173;
+const BASE_PATH = (process.env.BASE_PATH || "").replace(/\/+$/, ""); // simula a subpasta do GitHub Pages
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".xml": "application/xml", ".txt": "text/plain", ".svg": "image/svg+xml" };
 
 async function resolve(urlPath) {
@@ -21,10 +22,12 @@ async function resolve(urlPath) {
 }
 
 createServer(async (req, res) => {
-  const path = new URL(req.url, "http://x").pathname;
+  const full = new URL(req.url, "http://x").pathname;
+  if (BASE_PATH && !full.startsWith(BASE_PATH + "/")) { res.writeHead(302, { Location: BASE_PATH + "/" }); return res.end(); }
+  const path = full.slice(BASE_PATH.length);
   // /cardapio -> /cardapio/ (mantém as URLs antigas sem barra funcionando)
   if (!extname(path) && !path.endsWith("/")) {
-    if (await resolve(path + "/")) { res.writeHead(301, { Location: path + "/" }); return res.end(); }
+    if (await resolve(path + "/")) { res.writeHead(301, { Location: full + "/" }); return res.end(); }
   }
   const file = await resolve(path);
   if (!file) {
@@ -33,4 +36,4 @@ createServer(async (req, res) => {
   }
   res.writeHead(200, { "Content-Type": TYPES[extname(file)] || "application/octet-stream", "Cache-Control": "no-cache" });
   res.end(await readFile(file));
-}).listen(PORT, () => console.log(`Kombi's Hot Dog em http://localhost:${PORT}`));
+}).listen(PORT, () => console.log(`Kombi's Hot Dog em http://localhost:${PORT}${BASE_PATH}/`));

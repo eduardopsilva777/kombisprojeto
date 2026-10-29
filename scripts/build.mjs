@@ -18,6 +18,14 @@ const SRC = join(ROOT, "src");
 const DIST = join(ROOT, "dist");
 const PAGES = [home, cardapio, pedido, sobre, eventos, parceiros, menuRedirect, notFound];
 const CSS_ORDER = ["tokens.css", "base.css", "components.css", "pages.css"];
+// Publicação em subpasta (GitHub Pages: /kombisprojeto) e URL pública. Vazios = raiz do domínio oficial.
+const BASE_PATH = (process.env.BASE_PATH || "").replace(/\/+$/, "");
+const SITE_URL = (process.env.SITE_URL || SITE.url).replace(/\/+$/, "");
+const ROUTES = "assets|cardapio|pedido|sobre|eventos|parceiros|menu";
+const withBase = (text) => !BASE_PATH ? text : text
+  .replace(new RegExp(`(["'\`])/(?=(?:${ROUTES})/|#|["'\`?])`, "g"), `$1${BASE_PATH}/`)
+  .replace(/(, |url=)\/(?=assets\/|cardapio\/)/g, `$1${BASE_PATH}/`);
+const withUrl = (text) => text.replaceAll(SITE.url, SITE_URL);
 
 await rm(DIST, { recursive: true, force: true });
 await mkdir(DIST, { recursive: true });
@@ -29,7 +37,13 @@ await mkdir(join(DIST, "assets/css"), { recursive: true });
 await writeFile(join(DIST, "assets/css/site.css"), css);
 
 // Módulos JS: mesma estrutura de pastas do src, para os imports relativos funcionarem no navegador.
-for (const dir of ["client", "components", "data", "lib"]) await cp(join(SRC, dir), join(DIST, "assets/js", dir), { recursive: true });
+for (const dir of ["client", "components", "data", "lib"]) {
+  await cp(join(SRC, dir), join(DIST, "assets/js", dir), { recursive: true });
+  if (BASE_PATH) for (const f of await readdir(join(DIST, "assets/js", dir))) {
+    const file = join(DIST, "assets/js", dir, f);
+    await writeFile(file, withBase(await readFile(file, "utf8")));
+  }
+}
 await cp(join(SRC, "assets/img"), join(DIST, "assets/img"), { recursive: true });
 
 // Versão para cache-busting: hash do conteúdo de src.
@@ -40,7 +54,7 @@ for (const f of await readdir(SRC, { recursive: true })) {
 const version = hash.digest("hex").slice(0, 10);
 
 for (const page of PAGES) {
-  const html = Layout({ ...page, body: page.body() }).replaceAll("__BUILD__", version);
+  const html = withUrl(withBase(Layout({ ...page, body: page.body() }).replaceAll("__BUILD__", version)));
   const out = page.path.endsWith(".html") ? join(DIST, page.path) : join(DIST, page.path, "index.html");
   await mkdir(dirname(out), { recursive: true });
   await writeFile(out, html);
@@ -49,9 +63,9 @@ for (const page of PAGES) {
 const indexable = PAGES.filter((p) => !p.noindex);
 await writeFile(join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${indexable.map((p) => `  <url><loc>${SITE.url}${p.path}</loc></url>`).join("\n")}
+${indexable.map((p) => `  <url><loc>${SITE_URL}${p.path}</loc></url>`).join("\n")}
 </urlset>
 `);
-await writeFile(join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`);
+await writeFile(join(DIST, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
-console.log(`build ok · ${PAGES.length} páginas · v${version} · ${(css.length / 1024).toFixed(1)} KB de CSS`);
+console.log(`build ok · ${PAGES.length} páginas · v${version}${BASE_PATH ? ` · base ${BASE_PATH}` : ""} · ${(css.length / 1024).toFixed(1)} KB de CSS`);

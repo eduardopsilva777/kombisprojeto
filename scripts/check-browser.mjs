@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = process.argv[2] || join(ROOT, ".checks");
 const PORT = 4199, DEBUG = 9339;
-const BASE = `http://localhost:${PORT}`;
+const BASE = `http://localhost:${PORT}${(process.env.BASE_PATH || "").replace(/\/+$/, "")}`;
 const BROWSERS = [
   process.env.CHROME_PATH,
   "C:/Program Files/Google/Chrome/Application/chrome.exe",
